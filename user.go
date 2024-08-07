@@ -8,9 +8,9 @@ import "time"
 type UUID string
 
 type User struct {
-	Id           UUID   `json:"-"`
-	Name         string `json:"name"`
-	PasswordHash string `json:"passwordHash"`
+	Id       UUID   `json:"-"`
+	Name     string `json:"name" binding:"required"`
+	Password string `json:"password" binding:"required"`
 }
 
 type Statistic struct {

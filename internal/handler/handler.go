@@ -3,6 +3,7 @@ package handler
 import (
 	"github.com/Aleksandr-qefy/links-api/internal/service"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 type Handler struct {
@@ -17,7 +18,9 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
 
 	router.GET("/ping", func(c *gin.Context) {
-
+		c.JSON(http.StatusOK, map[string]interface{}{
+			"ping": "pong",
+		})
 	})
 
 	auth := router.Group("/auth")

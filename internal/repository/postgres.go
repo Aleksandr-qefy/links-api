@@ -6,6 +6,14 @@ import (
 	_ "github.com/lib/pq"
 )
 
+const (
+	usersTable           = "users"
+	statisticsTable      = "statistics"
+	linksTable           = "links"
+	categoriesTable      = "categories"
+	linksCategoriesTable = "links_categories"
+)
+
 type Config struct {
 	Host     string
 	Port     string
