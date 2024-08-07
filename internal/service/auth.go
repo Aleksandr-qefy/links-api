@@ -3,8 +3,10 @@ package service
 import (
 	"crypto/sha1"
 	"fmt"
-	api "github.com/Aleksandr-qefy/links-api"
 	"github.com/Aleksandr-qefy/links-api/internal/repository"
+	repoModel "github.com/Aleksandr-qefy/links-api/internal/repository/model"
+	model "github.com/Aleksandr-qefy/links-api/internal/service/model"
+	"github.com/Aleksandr-qefy/links-api/internal/uuid"
 	"os"
 )
 
@@ -16,9 +18,12 @@ func NewAuthService(repo repository.Authorization) *AuthService {
 	return &AuthService{repo: repo}
 }
 
-func (s *AuthService) CreateUser(user api.User) (api.UUID, error) {
-	user.Password = s.generatePasswordHash(user.Password)
-	return s.repo.CreateUser(user)
+func (s *AuthService) CreateUser(user model.User) (uuid.UUID, error) {
+	repoUser := repoModel.User{
+		Name:         user.Name,
+		PasswordHash: s.generatePasswordHash(user.Password),
+	}
+	return s.repo.CreateUser(repoUser)
 }
 
 func (s *AuthService) generatePasswordHash(password string) string {

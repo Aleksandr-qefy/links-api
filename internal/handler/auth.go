@@ -1,13 +1,13 @@
 package handler
 
 import (
-	api "github.com/Aleksandr-qefy/links-api"
+	serviceModel "github.com/Aleksandr-qefy/links-api/internal/service/model"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 func (h *Handler) signUp(c *gin.Context) {
-	var input api.User
+	var input serviceModel.User
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return

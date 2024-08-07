@@ -1,12 +1,13 @@
 package repository
 
 import (
-	api "github.com/Aleksandr-qefy/links-api"
+	repoModel "github.com/Aleksandr-qefy/links-api/internal/repository/model"
+	"github.com/Aleksandr-qefy/links-api/internal/uuid"
 	"github.com/jmoiron/sqlx"
 )
 
 type Authorization interface {
-	CreateUser(user api.User) (api.UUID, error)
+	CreateUser(user repoModel.User) (uuid.UUID, error)
 }
 
 type Link interface {

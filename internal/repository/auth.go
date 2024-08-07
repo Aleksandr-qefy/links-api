@@ -2,7 +2,8 @@ package repository
 
 import (
 	"fmt"
-	api "github.com/Aleksandr-qefy/links-api"
+	repoModel "github.com/Aleksandr-qefy/links-api/internal/repository/model"
+	"github.com/Aleksandr-qefy/links-api/internal/uuid"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -14,12 +15,15 @@ func NewAuth(db *sqlx.DB) *Auth {
 	return &Auth{db: db}
 }
 
-func (r *Auth) CreateUser(user api.User) (api.UUID, error) {
-	query := fmt.Sprintf("INSERT INTO %s (name, password_hash) values ($1, $2) RETURNING id")
-	row := r.db.QueryRow(query, user.Name, user.Password)
-	var id api.UUID
+func (r *Auth) CreateUser(user repoModel.User) (uuid.UUID, error) {
+	query := fmt.Sprintf(
+		"INSERT INTO %s (name, password_hash) values ($1, $2) RETURNING id",
+		usersTable,
+	)
+	row := r.db.QueryRow(query, user.Name, user.PasswordHash)
+	var id uuid.UUID
 	if err := row.Scan(&id); err != nil {
-		return api.UUID(""), err
+		return "", err
 	}
-	return api.UUID(""), nil
+	return id, nil
 }

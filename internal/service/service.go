@@ -1,12 +1,13 @@
 package service
 
 import (
-	api "github.com/Aleksandr-qefy/links-api"
 	"github.com/Aleksandr-qefy/links-api/internal/repository"
+	model "github.com/Aleksandr-qefy/links-api/internal/service/model"
+	"github.com/Aleksandr-qefy/links-api/internal/uuid"
 )
 
 type Authorization interface {
-	CreateUser(user api.User) (api.UUID, error)
+	CreateUser(user model.User) (uuid.UUID, error)
 }
 
 type Link interface {

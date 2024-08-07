@@ -1,9 +1,9 @@
 package main
 
 import (
-	api "github.com/Aleksandr-qefy/links-api"
 	"github.com/Aleksandr-qefy/links-api/internal/handler"
 	"github.com/Aleksandr-qefy/links-api/internal/repository"
+	server "github.com/Aleksandr-qefy/links-api/internal/server"
 	"github.com/Aleksandr-qefy/links-api/internal/service"
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
@@ -38,7 +38,7 @@ func main() {
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services)
 
-	srv := &api.Server{}
+	srv := &server.Server{}
 	if err := srv.Run(viper.GetString("port"), handlers.InitRoutes()); err != nil {
 		logrus.Fatalf("error occured while running http server: %s", err.Error())
 	}
