@@ -5,16 +5,18 @@ import "time"
 // https://www.sohamkamani.com/golang/json/
 // JSON output
 
+type UUID string
+
 type User struct {
-	Id       int    `json:"-"`
-	Name     string `json:"name"`
-	Password string `json:"password"`
+	Id           UUID   `json:"-"`
+	Name         string `json:"name"`
+	PasswordHash string `json:"passwordHash"`
 }
 
 type Statistic struct {
-	Id        int       `json:"id"`
-	UserId    int       `json:"userId"`
+	Id        UUID      `json:"id"`
+	UserId    UUID      `json:"userId"`
 	CreatedAt time.Time `json:"createdAt"`
-	Action    string    `json:"action"`
+	Activity  string    `json:"activity"`
 	Comment   string    `json:"comment,omitempty"`
 }

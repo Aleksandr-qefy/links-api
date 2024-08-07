@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS links_categories;
+
+DROP TABLE IF EXISTS categories;
+
+DROP TABLE IF EXISTS links;
+
+DROP TABLE IF EXISTS statistics;
+
+DROP TABLE IF EXISTS users;

@@ -16,6 +16,10 @@ func NewHandler(services *service.Service) *Handler {
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
 
+	router.GET("/ping", func(c *gin.Context) {
+
+	})
+
 	auth := router.Group("/auth")
 	{
 		auth.POST("sign-up", h.signUp)
@@ -24,24 +28,34 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	api := router.Group("/api")
 	{
+		statistics := api.Group("/statistics")
+		{
+			statistics.GET("/all/:userid", h.statisticList) // get all
+
+			statistics.DELETE("/:id", h.deleteStatistic) // delete
+		}
+
+		categories := api.Group("/categories")
+		{
+			categories.GET("/all", h.categoriesList) // get all
+
+			categories.PUT("/", h.createCategory)       // create category
+			categories.GET("/:id", h.readCategory)      // read category
+			categories.POST("/", h.updateCategory)      // update category
+			categories.DELETE("/:id", h.deleteCategory) // delete category
+		}
+
 		links := api.Group("/links")
 		{
 			links.GET("/all", h.linksList) // get all
 
 			links.PUT("/", h.createLink)       // create link
 			links.GET("/:id", h.readLink)      // read link
-			links.POST("/:id", h.updateLink)   // update link
+			links.POST("/", h.updateLink)      // update link
 			links.DELETE("/:id", h.deleteLink) // delete link
-		}
 
-		statistics := api.Group("/statistics")
-		{
-			statistics.GET("/all/:userid", h.statisticList) // get all
-
-			statistics.PUT("/", h.createStatistic)       // create
-			statistics.GET("/:id", h.readStatistic)      // read
-			statistics.POST("/:id", h.updateStatistic)   // update
-			statistics.DELETE("/:id", h.deleteStatistic) // delete
+			links.POST("/add-to-category", h.addLinkToCategory)
+			links.POST("/remove-from-category", h.removeLinkFromCategory)
 		}
 	}
 

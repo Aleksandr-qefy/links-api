@@ -1,12 +1,18 @@
 package links_api
 
-import "time"
-
 type Link struct {
-	Id          int       `json:"id"`
-	UserId      int       `json:"userId"`
-	Ref         string    `json:"ref"`
-	Description string    `json:"description,omitempty"`
-	CreatedAt   time.Time `json:"createdAt"`
-	UpdatedAt   time.Time `json:"updatedAt"`
+	Id          UUID   `json:"id"`
+	UserId      UUID   `json:"userId"`
+	Ref         string `json:"ref"`
+	Description string `json:"description,omitempty"`
+}
+
+type Category struct {
+	Id   UUID   `json:"id"`
+	Name string `json:"name"`
+}
+
+type LinkCategory struct {
+	LinkId     UUID `json:"linkId"`
+	CategoryId UUID `json:"categoryId"`
 }
