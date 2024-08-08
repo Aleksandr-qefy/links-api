@@ -3,6 +3,7 @@ package repository
 import (
 	"fmt"
 	repoModel "github.com/Aleksandr-qefy/links-api/internal/repository/model"
+	//serviceModel "github.com/Aleksandr-qefy/links-api/internal/service/model"
 	"github.com/Aleksandr-qefy/links-api/internal/uuid"
 	"github.com/jmoiron/sqlx"
 )
@@ -26,4 +27,14 @@ func (r *Auth) CreateUser(user repoModel.User) (uuid.UUID, error) {
 		return "", err
 	}
 	return id, nil
+}
+
+func (r *Auth) GetUser(user repoModel.User) (repoModel.User, error) {
+	var outputUser repoModel.User
+	query := fmt.Sprintf(
+		"SELECT id FROM %s WHERE name=$1 AND password_hash=$2",
+		usersTable,
+	)
+	err := r.db.Get(&outputUser, query, user.Name, user.PasswordHash)
+	return outputUser, err
 }

@@ -8,6 +8,8 @@ import (
 
 type Authorization interface {
 	CreateUser(user model.User) (uuid.UUID, error)
+	GenerateToken(name, password string) (string, error)
+	GetUser(name, password string) (model.User, error)
 }
 
 type Link interface {

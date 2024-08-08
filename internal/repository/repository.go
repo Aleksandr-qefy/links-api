@@ -8,6 +8,7 @@ import (
 
 type Authorization interface {
 	CreateUser(user repoModel.User) (uuid.UUID, error)
+	GetUser(user repoModel.User) (repoModel.User, error)
 }
 
 type Link interface {

@@ -14,6 +14,11 @@ type User struct {
 	Password string    `json:"password" binding:"required"`
 }
 
+type UserSign struct {
+	Name     string `json:"name" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}
+
 type Statistic struct {
 	Id        uuid.UUID `json:"id"`
 	UserId    uuid.UUID `json:"userId"`
