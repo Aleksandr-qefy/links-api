@@ -10,6 +10,7 @@ type Authorization interface {
 	CreateUser(user model.User) (uuid.UUID, error)
 	GenerateToken(name, password string) (string, error)
 	GetUser(name, password string) (model.User, error)
+	ParseToken(token string) (uuid.UUID, error)
 }
 
 type Link interface {

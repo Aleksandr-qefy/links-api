@@ -2,6 +2,7 @@ package service
 
 import (
 	"crypto/sha1"
+	"errors"
 	"fmt"
 	"github.com/Aleksandr-qefy/links-api/internal/repository"
 	repoModel "github.com/Aleksandr-qefy/links-api/internal/repository/model"
@@ -65,6 +66,25 @@ func (s *AuthService) GenerateToken(name string, password string) (string, error
 	})
 
 	return token.SignedString([]byte(signingKey))
+}
+
+func (s *AuthService) ParseToken(accessToken string) (uuid.UUID, error) {
+	token, err := jwt.ParseWithClaims(accessToken, &model.TokenClaims{}, func(token *jwt.Token) (interface{}, error) {
+		if _, isOk := token.Method.(*jwt.SigningMethodHMAC); !isOk {
+			return nil, errors.New("invalid signing method")
+		}
+		return []byte(signingKey), nil
+	})
+	if err != nil {
+		return "", err
+	}
+
+	claims, ok := token.Claims.(*model.TokenClaims)
+	if !ok {
+		return "", errors.New("token claims are not  of type *model.TokenClaims")
+	}
+
+	return claims.UserId, nil
 }
 
 func (s *AuthService) generatePasswordHash(password string) string {
