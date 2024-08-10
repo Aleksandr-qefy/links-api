@@ -26,33 +26,33 @@ func NewAuthService(repo repository.Authorization) *AuthService {
 	return &AuthService{repo: repo}
 }
 
-func (s *AuthService) CreateUser(user model.User) (uuid.UUID, error) {
+func (s *AuthService) CreateUser(user model.UserAccount) (uuid.UUID, error) {
 	return s.repo.CreateUser(repoModel.User{
 		Name:         user.Name,
 		PasswordHash: s.generatePasswordHash(user.Password),
 	})
 }
 
-func (s *AuthService) GetUser(name string, password string) (model.User, error) {
+func (s *AuthService) GetUser(userAccount model.UserAccount) (model.User, error) {
 
 	repoUser, err := s.repo.GetUser(repoModel.User{
-		Name:         name,
-		PasswordHash: s.generatePasswordHash(password),
+		Name:         userAccount.Name,
+		PasswordHash: s.generatePasswordHash(userAccount.Password),
 	})
 	if err != nil {
 		return model.User{}, err
 	}
 
 	user := model.User{
-		Id:       repoUser.Id,
-		Name:     repoUser.Name,
-		Password: repoUser.PasswordHash,
+		Id:           repoUser.Id,
+		Name:         repoUser.Name,
+		PasswordHash: repoUser.PasswordHash,
 	}
 	return user, nil
 }
 
-func (s *AuthService) GenerateToken(name string, password string) (string, error) {
-	user, err := s.GetUser(name, password)
+func (s *AuthService) GenerateToken(userAccount model.UserAccount) (string, error) {
+	user, err := s.GetUser(userAccount)
 	if err != nil {
 		return "", err
 	}

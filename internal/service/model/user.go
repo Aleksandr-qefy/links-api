@@ -6,7 +6,12 @@ import (
 )
 
 type User struct {
-	Id       uuid.UUID
+	Id           uuid.UUID
+	Name         string
+	PasswordHash string
+}
+
+type UserAccount struct {
 	Name     string
 	Password string
 }

@@ -9,23 +9,23 @@ import (
 )
 
 func (h *Handler) signUp(c *gin.Context) {
-	var inputUser model.UserSign
-	if err := c.BindJSON(&inputUser); err != nil {
+	var userAccount model.UserAccount
+	if err := c.BindJSON(&userAccount); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	id, err := h.services.Authorization.CreateUser(serviceModel.User{
-		Name:     inputUser.Name,
-		Password: inputUser.Password,
+	id, err := h.services.Authorization.CreateUser(serviceModel.UserAccount{
+		Name:     userAccount.Name,
+		Password: userAccount.Password,
 	})
 	if err != nil {
 		newErrorResponse(
 			c,
-			http.StatusInternalServerError,
+			http.StatusBadRequest,
 			fmt.Sprintf(
 				"User with name '%s' exists already (%s)",
-				inputUser.Name,
+				userAccount.Name,
 				err.Error(),
 			), // err.Error()
 		)
@@ -38,20 +38,22 @@ func (h *Handler) signUp(c *gin.Context) {
 }
 
 func (h *Handler) signIn(c *gin.Context) {
-	var inputUser model.UserSign
-	if err := c.BindJSON(&inputUser); err != nil {
+	var userAccount model.UserAccount
+	if err := c.BindJSON(&userAccount); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
 	id, err := h.services.Authorization.GenerateToken(
-		inputUser.Name,
-		inputUser.Password,
+		serviceModel.UserAccount{
+			Name:     userAccount.Name,
+			Password: userAccount.Password,
+		},
 	)
 	if err != nil {
 		newErrorResponse(
 			c,
-			http.StatusInternalServerError,
+			http.StatusBadRequest,
 			fmt.Sprintf("Incorrect name or password (%s)", err.Error()), // err.Error()
 		)
 		return
