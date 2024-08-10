@@ -6,7 +6,8 @@ type Link struct {
 	Id          uuid.UUID
 	UserId      uuid.UUID
 	Ref         string
-	Description string
+	Description *string
+	Categories  []uuid.UUID
 }
 
 type Category struct {

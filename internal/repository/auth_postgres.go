@@ -8,15 +8,15 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-type Auth struct {
+type AuthPostgres struct {
 	db *sqlx.DB
 }
 
-func NewAuth(db *sqlx.DB) *Auth {
-	return &Auth{db: db}
+func NewAuthPostgres(db *sqlx.DB) *AuthPostgres {
+	return &AuthPostgres{db: db}
 }
 
-func (r *Auth) CreateUser(user repoModel.User) (uuid.UUID, error) {
+func (r *AuthPostgres) CreateUser(user repoModel.User) (uuid.UUID, error) {
 	query := fmt.Sprintf(
 		"INSERT INTO %s (name, password_hash) values ($1, $2) RETURNING id",
 		usersTable,
@@ -29,7 +29,7 @@ func (r *Auth) CreateUser(user repoModel.User) (uuid.UUID, error) {
 	return id, nil
 }
 
-func (r *Auth) GetUser(user repoModel.User) (repoModel.User, error) {
+func (r *AuthPostgres) GetUser(user repoModel.User) (repoModel.User, error) {
 	var outputUser repoModel.User
 	query := fmt.Sprintf(
 		"SELECT id FROM %s WHERE name=$1 AND password_hash=$2",

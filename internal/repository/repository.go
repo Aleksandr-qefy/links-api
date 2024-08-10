@@ -12,6 +12,10 @@ type Authorization interface {
 }
 
 type Link interface {
+	Create(link repoModel.Link) (uuid.UUID, error)
+	GetAll(userId uuid.UUID) ([]repoModel.Link, error)
+	GetById(userId, linkId uuid.UUID) (repoModel.Link, error)
+	DeleteById(userId, linkId uuid.UUID) error
 }
 
 type Repository struct {
@@ -21,6 +25,7 @@ type Repository struct {
 
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
-		Authorization: NewAuth(db),
+		Authorization: NewAuthPostgres(db),
+		Link:          NewLinkPostgres(db),
 	}
 }

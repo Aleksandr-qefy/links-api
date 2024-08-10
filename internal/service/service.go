@@ -7,13 +7,17 @@ import (
 )
 
 type Authorization interface {
-	CreateUser(model.UserAccount) (uuid.UUID, error)
-	GenerateToken(model.UserAccount) (string, error)
-	GetUser(model.UserAccount) (model.User, error)
-	ParseToken(token string) (uuid.UUID, error)
+	CreateUser(userAcc model.UserAccount) (uuid.UUID, error)
+	GenerateToken(userAcc model.UserAccount) (string, error)
+	GetUser(userAcc model.UserAccount) (model.User, error)
+	ParseToken(bearerToken string) (uuid.UUID, error)
 }
 
 type Link interface {
+	Create(link model.Link) (uuid.UUID, error)
+	GetAll(userId uuid.UUID) ([]model.Link, error)
+	GetById(userId, linkId uuid.UUID) (model.Link, error)
+	DeleteById(userId, linkId uuid.UUID) error
 }
 
 type Service struct {
@@ -24,5 +28,6 @@ type Service struct {
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
 		Authorization: NewAuthService(repos.Authorization),
+		Link:          NewLinkService(repos.Link),
 	}
 }

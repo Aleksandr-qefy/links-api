@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"errors"
+	"github.com/Aleksandr-qefy/links-api/internal/uuid"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
@@ -31,4 +33,20 @@ func (h *Handler) userIdentity(c *gin.Context) {
 	}
 
 	c.Set(userCtx, userId)
+}
+
+func getUserId(c *gin.Context) (uuid.UUID, error) {
+	userId, ok := c.Get(userCtx)
+	if !ok {
+		newErrorResponse(c, http.StatusInternalServerError, "user id not found")
+		return "", errors.New("user id not found")
+	}
+
+	userIdUUID, ok := userId.(uuid.UUID)
+	if !ok {
+		newErrorResponse(c, http.StatusInternalServerError, "user id not found")
+		return "", errors.New("user id not found")
+	}
+
+	return userIdUUID, nil
 }
