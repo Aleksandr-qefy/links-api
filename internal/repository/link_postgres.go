@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"fmt"
 	repoModel "github.com/Aleksandr-qefy/links-api/internal/repository/model"
 	"github.com/Aleksandr-qefy/links-api/internal/uuid"
@@ -103,10 +104,21 @@ func (r LinkPostgres) GetById(userId, linkId uuid.UUID) (repoModel.Link, error) 
 }
 
 func (r LinkPostgres) DeleteById(userId, linkId uuid.UUID) error {
+	var linksCount int
 	query := fmt.Sprintf(
+		"SELECT SUM(1) FROM %s l WHERE id = $1 AND l.user_id = $2",
+		linksTable,
+	)
+	err := r.db.Select(&linksCount, query, linkId, userId)
+
+	if linksCount == 0 {
+		return errors.New("no link with such id for this user found")
+	}
+
+	query = fmt.Sprintf(
 		"DELETE FROM %s l WHERE id = $1 AND l.user_id = $2",
 		linksTable,
 	)
-	_, err := r.db.Exec(query, linkId, userId)
+	_, err = r.db.Exec(query, linkId, userId)
 	return err
 }

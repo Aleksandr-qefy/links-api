@@ -99,7 +99,7 @@ func (h *Handler) deleteLinkById(c *gin.Context) {
 
 	err = h.services.Link.DeleteById(userId, linkId)
 	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "incorrect link id (or not accessible for this user)")
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
