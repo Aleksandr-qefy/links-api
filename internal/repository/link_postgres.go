@@ -109,7 +109,8 @@ func (r LinkPostgres) DeleteById(userId, linkId uuid.UUID) error {
 		"SELECT SUM(1) FROM %s l WHERE id = $1 AND l.user_id = $2",
 		linksTable,
 	)
-	err := r.db.Select(&linksCount, query, linkId, userId)
+
+	err := r.db.Get(&linksCount, query, linkId, userId)
 
 	if linksCount == 0 {
 		return errors.New("no link with such id for this user found")
