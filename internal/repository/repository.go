@@ -16,6 +16,7 @@ type Link interface {
 	GetAll(userId uuid.UUID) ([]repoModel.Link, error)
 	GetById(userId, linkId uuid.UUID) (repoModel.Link, error)
 	DeleteById(userId, linkId uuid.UUID) error
+	Update(link repoModel.Link) error
 }
 
 type Repository struct {

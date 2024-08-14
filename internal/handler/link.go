@@ -80,7 +80,37 @@ func (h *Handler) getLinkById(c *gin.Context) {
 }
 
 func (h *Handler) updateLinkById(c *gin.Context) {
+	userId, err := getUserId(c)
+	if err != nil {
+		return
+	}
 
+	var linkUpdate model.LinkUpdate
+	if err := c.BindJSON(&linkUpdate); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	var categories []uuid.UUID = nil
+	if linkUpdate.Categories != nil {
+		categories = *linkUpdate.Categories
+	}
+
+	err = h.services.Link.Update(servModel.Link{
+		UserId:      userId,
+		Id:          linkUpdate.Id,
+		Ref:         linkUpdate.Ref,
+		Description: linkUpdate.Description,
+		Categories:  categories,
+	})
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, StatusResponse{
+		Status: "ok",
+	})
 }
 
 func (h *Handler) deleteLinkById(c *gin.Context) {

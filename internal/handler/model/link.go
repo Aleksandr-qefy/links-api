@@ -10,6 +10,13 @@ type Link struct {
 	Categories  []uuid.UUID `json:"categories"`
 }
 
+type LinkUpdate struct {
+	Id          uuid.UUID    `json:"id" binding:"required"`
+	Ref         string       `json:"ref,omitempty"`
+	Description *string      `json:"description,omitempty"`
+	Categories  *[]uuid.UUID `json:"categories,omitempty"`
+}
+
 type Category struct {
 	Id   uuid.UUID `json:"id"`
 	Name string    `json:"name"`

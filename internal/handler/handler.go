@@ -54,7 +54,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 			links.PUT("/", h.createLink)           // create link
 			links.GET("/:id", h.getLinkById)       // read link
-			links.POST("/:id", h.updateLinkById)   // update link
+			links.POST("/", h.updateLinkById)      // update link
 			links.DELETE("/:id", h.deleteLinkById) // delete link
 
 			links.POST("/add-to-category", h.addLinkToCategory)

@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"github.com/Aleksandr-qefy/links-api/internal/repository"
 	repoModel "github.com/Aleksandr-qefy/links-api/internal/repository/model"
 	model "github.com/Aleksandr-qefy/links-api/internal/service/model"
@@ -23,9 +24,13 @@ func (s LinkService) Create(link model.Link) (uuid.UUID, error) {
 		description = strings.TrimSpace(description)
 		descriptionP = &description
 	}
+	trimmedRef := strings.TrimSpace(link.Ref)
+	if trimmedRef == "" {
+		return "", errors.New("link's ref should contain url")
+	}
 	return s.repo.Create(repoModel.Link{
 		UserId:      link.UserId,
-		Ref:         strings.TrimSpace(link.Ref),
+		Ref:         trimmedRef,
 		Description: descriptionP,
 		Categories:  link.Categories,
 	})
@@ -68,4 +73,25 @@ func (s LinkService) GetById(userId, linkId uuid.UUID) (model.Link, error) {
 
 func (s LinkService) DeleteById(userId, linkId uuid.UUID) error {
 	return s.repo.DeleteById(userId, linkId)
+}
+
+func (s LinkService) Update(link model.Link) error {
+	var descriptionP *string
+	if link.Description != nil {
+		description := *link.Description
+		description = strings.TrimSpace(description)
+		descriptionP = &description
+	}
+
+	trimmedRef := strings.TrimSpace(link.Ref)
+	if link.Ref != "" && trimmedRef == "" { // check if in update link was not ref at all
+		return errors.New("link's ref should contain url")
+	}
+	return s.repo.Update(repoModel.Link{
+		Id:          link.Id,
+		UserId:      link.UserId,
+		Ref:         trimmedRef,
+		Description: descriptionP,
+		Categories:  link.Categories,
+	})
 }

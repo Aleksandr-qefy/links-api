@@ -18,6 +18,7 @@ type Link interface {
 	GetAll(userId uuid.UUID) ([]model.Link, error)
 	GetById(userId, linkId uuid.UUID) (model.Link, error)
 	DeleteById(userId, linkId uuid.UUID) error
+	Update(model.Link) error
 }
 
 type Service struct {

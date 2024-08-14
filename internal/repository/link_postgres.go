@@ -94,7 +94,7 @@ func (r LinkPostgres) GetAll(userId uuid.UUID) ([]repoModel.Link, error) {
 func (r LinkPostgres) GetById(userId, linkId uuid.UUID) (repoModel.Link, error) {
 	var link repoModel.Link
 	query := fmt.Sprintf(
-		"SELECT * FROM %s l WHERE id = $1 AND l.user_id = $2",
+		"SELECT * FROM %s l WHERE l.id = $1 AND l.user_id = $2",
 		linksTable,
 	)
 
@@ -106,7 +106,7 @@ func (r LinkPostgres) GetById(userId, linkId uuid.UUID) (repoModel.Link, error) 
 func (r LinkPostgres) DeleteById(userId, linkId uuid.UUID) error {
 	var linksCount int
 	query := fmt.Sprintf(
-		"SELECT SUM(1) FROM %s l WHERE id = $1 AND l.user_id = $2",
+		"SELECT SUM(1) FROM %s l WHERE l.id = $1 AND l.user_id = $2",
 		linksTable,
 	)
 
@@ -117,9 +117,59 @@ func (r LinkPostgres) DeleteById(userId, linkId uuid.UUID) error {
 	}
 
 	query = fmt.Sprintf(
-		"DELETE FROM %s l WHERE id = $1 AND l.user_id = $2",
+		"DELETE FROM %s l WHERE l.id = $1 AND l.user_id = $2",
 		linksTable,
 	)
 	_, err = r.db.Exec(query, linkId, userId)
+	return err
+}
+
+func (r LinkPostgres) Update(linkUpdate repoModel.Link) error {
+	var linksCount int
+	query := fmt.Sprintf(
+		"SELECT SUM(1) FROM %s l WHERE l.id = $1 AND l.user_id = $2",
+		linksTable,
+	)
+
+	err := r.db.Get(&linksCount, query, linkUpdate.Id, linkUpdate.UserId)
+
+	if linksCount == 0 {
+		return errors.New("no link with such id for this user found")
+	}
+
+	setValues := make([]string, 0)
+	args := make([]interface{}, 0)
+	argId := 1
+
+	if linkUpdate.Ref != "" {
+		setValues = append(setValues, fmt.Sprintf("ref=$%d", argId))
+		argId++
+		args = append(args, linkUpdate.Ref)
+	}
+
+	if linkUpdate.Description != nil {
+		setValues = append(setValues, fmt.Sprintf("description=$%d", argId))
+		argId++
+		args = append(args, *linkUpdate.Description)
+	}
+
+	if linkUpdate.Categories != nil {
+
+	}
+
+	setValuesQueryPart := strings.Join(setValues, ", ")
+
+	query = fmt.Sprintf(
+		"UPDATE %s l SET %s WHERE l.id = $%d AND l.user_id = $%d",
+		linksTable,
+		setValuesQueryPart,
+		argId,
+		argId+1,
+	)
+
+	args = append(args, string(linkUpdate.Id))
+	args = append(args, string(linkUpdate.UserId))
+
+	_, err = r.db.Exec(query, args...)
 	return err
 }
