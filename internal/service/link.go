@@ -43,13 +43,13 @@ func (s LinkService) GetAll(userId uuid.UUID) ([]model.Link, error) {
 	}
 
 	links := make([]model.Link, len(repoLinks))
-	for i := 0; i < len(repoLinks); i++ {
+	for i, repoLink := range repoLinks {
 		links[i] = model.Link{
-			Id:          repoLinks[i].Id,
-			UserId:      repoLinks[i].UserId,
-			Ref:         repoLinks[i].Ref,
-			Description: repoLinks[i].Description,
-			Categories:  repoLinks[i].Categories,
+			Id:          repoLink.Id,
+			UserId:      repoLink.UserId,
+			Ref:         repoLink.Ref,
+			Description: repoLink.Description,
+			Categories:  repoLink.Categories,
 		}
 	}
 

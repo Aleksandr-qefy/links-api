@@ -42,10 +42,10 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		{
 			categories.GET("/all", h.categoriesList) // get all
 
-			categories.PUT("/", h.createCategory)       // create category
-			categories.GET("/:id", h.readCategory)      // read category
-			categories.POST("/", h.updateCategory)      // update category
-			categories.DELETE("/:id", h.deleteCategory) // delete category
+			categories.PUT("/", h.createCategory)           // create category
+			categories.GET("/:id", h.getCategoryById)       // read category
+			categories.POST("/", h.updateCategory)          // update category
+			categories.DELETE("/:id", h.deleteCategoryById) // delete category
 		}
 
 		links := api.Group("/links")
@@ -54,11 +54,8 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 			links.PUT("/", h.createLink)           // create link
 			links.GET("/:id", h.getLinkById)       // read link
-			links.POST("/", h.updateLinkById)      // update link
+			links.POST("/", h.updateLink)          // update link
 			links.DELETE("/:id", h.deleteLinkById) // delete link
-
-			links.POST("/add-to-category", h.addLinkToCategory)
-			links.POST("/remove-from-category", h.removeLinkFromCategory)
 		}
 	}
 

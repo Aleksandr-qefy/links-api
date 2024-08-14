@@ -19,14 +19,24 @@ type Link interface {
 	Update(link repoModel.Link) error
 }
 
+type Category interface {
+	Create(category repoModel.Category) (uuid.UUID, error)
+	GetAll(userId uuid.UUID) ([]repoModel.Category, error)
+	GetById(userId, categoryId uuid.UUID) (repoModel.Category, error)
+	DeleteById(userId, categoryId uuid.UUID) error
+	Update(category repoModel.Category) error
+}
+
 type Repository struct {
 	Authorization
 	Link
+	Category
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
 		Authorization: NewAuthPostgres(db),
 		Link:          NewLinkPostgres(db),
+		Category:      NewCategPostgres(db),
 	}
 }

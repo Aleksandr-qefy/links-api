@@ -14,16 +14,26 @@ func (h *Handler) linksList(c *gin.Context) {
 		return
 	}
 
-	links, err := h.services.Link.GetAll(userId)
+	servLinks, err := h.services.Link.GetAll(userId)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
+	links := make([]model.Link, len(servLinks))
+	for i, servLink := range servLinks {
+		links[i] = model.Link{
+			Id:          servLink.Id,
+			UserId:      servLink.UserId,
+			Ref:         servLink.Ref,
+			Description: servLink.Description,
+			Categories:  servLink.Categories,
+		}
+	}
+
 	c.JSON(http.StatusCreated, map[string]interface{}{
 		"data": links,
 	})
-
 }
 
 func (h *Handler) createLink(c *gin.Context) {
@@ -79,7 +89,7 @@ func (h *Handler) getLinkById(c *gin.Context) {
 	c.JSON(http.StatusCreated, link)
 }
 
-func (h *Handler) updateLinkById(c *gin.Context) {
+func (h *Handler) updateLink(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
 		return
@@ -121,7 +131,7 @@ func (h *Handler) deleteLinkById(c *gin.Context) {
 
 	linkIdStr := c.Param("id")
 	if linkIdStr == "" {
-		newErrorResponse(c, http.StatusBadRequest, "invalid link id param")
+		newErrorResponse(c, http.StatusBadRequest, "incorrect link id (or not accessible for this user)")
 		return
 	}
 

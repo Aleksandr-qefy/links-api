@@ -16,13 +16,3 @@ type LinkUpdate struct {
 	Description *string      `json:"description,omitempty"`
 	Categories  *[]uuid.UUID `json:"categories,omitempty"`
 }
-
-type Category struct {
-	Id   uuid.UUID `json:"id"`
-	Name string    `json:"name"`
-}
-
-type LinkCategory struct {
-	LinkId     uuid.UUID `json:"linkId"`
-	CategoryId uuid.UUID `json:"categoryId"`
-}

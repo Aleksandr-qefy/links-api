@@ -9,13 +9,3 @@ type Link struct {
 	Description *string
 	Categories  []uuid.UUID
 }
-
-type Category struct {
-	Id   uuid.UUID
-	Name string
-}
-
-type LinkCategory struct {
-	LinkId     uuid.UUID
-	CategoryId uuid.UUID
-}

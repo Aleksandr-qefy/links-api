@@ -113,7 +113,7 @@ func (r LinkPostgres) DeleteById(userId, linkId uuid.UUID) error {
 	err := r.db.Get(&linksCount, query, linkId, userId)
 
 	if linksCount == 0 {
-		return errors.New("no link with such id for this user found")
+		return errors.New("no link found with such id for this user")
 	}
 
 	query = fmt.Sprintf(
@@ -134,7 +134,7 @@ func (r LinkPostgres) Update(linkUpdate repoModel.Link) error {
 	err := r.db.Get(&linksCount, query, linkUpdate.Id, linkUpdate.UserId)
 
 	if linksCount == 0 {
-		return errors.New("no link with such id for this user found")
+		return errors.New("no link found with such id for this user")
 	}
 
 	setValues := make([]string, 0)
