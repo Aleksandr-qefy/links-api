@@ -7,5 +7,5 @@ type Link struct {
 	UserId      uuid.UUID `db:"user_id"`
 	Ref         string    `db:"ref"`
 	Description *string   `db:"description"`
-	Categories  []uuid.UUID
+	Categories  []Category
 }

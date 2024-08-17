@@ -12,11 +12,11 @@ type Authorization interface {
 }
 
 type Link interface {
-	Create(link repoModel.Link) (uuid.UUID, error)
+	Create(link repoModel.Link, categories []uuid.UUID) (uuid.UUID, error)
 	GetAll(userId uuid.UUID) ([]repoModel.Link, error)
 	GetById(userId, linkId uuid.UUID) (repoModel.Link, error)
 	DeleteById(userId, linkId uuid.UUID) error
-	Update(link repoModel.Link) error
+	Update(link repoModel.Link, categories []uuid.UUID) error
 }
 
 type Category interface {

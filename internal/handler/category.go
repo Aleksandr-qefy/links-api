@@ -23,9 +23,8 @@ func (h *Handler) categoriesList(c *gin.Context) {
 	categories := make([]model.Category, len(servCategories))
 	for i, servCategory := range servCategories {
 		categories[i] = model.Category{
-			Id:     servCategory.Id,
-			UserId: servCategory.UserId,
-			Name:   servCategory.Name,
+			Id:   servCategory.Id,
+			Name: servCategory.Name,
 		}
 	}
 

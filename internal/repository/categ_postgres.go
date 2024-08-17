@@ -58,7 +58,7 @@ func (r *CategPostgres) GetById(userId, categoryId uuid.UUID) (repoModel.Categor
 
 func (r *CategPostgres) DeleteById(userId, categoryId uuid.UUID) error {
 	query := fmt.Sprintf(
-		"SELECT SUM(1) FROM %s WHERE id=$1 AND user_id=$2",
+		"SELECT COALESCE(SUM(1), 0) FROM %s WHERE id=$1 AND user_id=$2",
 		categoriesTable,
 	)
 
@@ -79,7 +79,7 @@ func (r *CategPostgres) DeleteById(userId, categoryId uuid.UUID) error {
 
 func (r *CategPostgres) Update(categoryUpdate repoModel.Category) error {
 	query := fmt.Sprintf(
-		"SELECT SUM(1) FROM %s WHERE id=$1 AND user_id=$2",
+		"SELECT COALESCE(SUM(1), 0) FROM %s WHERE id=$1 AND user_id=$2",
 		categoriesTable,
 	)
 

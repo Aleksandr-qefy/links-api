@@ -14,11 +14,11 @@ type Authorization interface {
 }
 
 type Link interface {
-	Create(link model.Link) (uuid.UUID, error)
+	Create(link model.LinkUpdate) (uuid.UUID, error)
 	GetAll(userId uuid.UUID) ([]model.Link, error)
 	GetById(userId, linkId uuid.UUID) (model.Link, error)
 	DeleteById(userId, linkId uuid.UUID) error
-	Update(link model.Link) error
+	Update(link model.LinkUpdate) error
 }
 
 type Category interface {

@@ -22,12 +22,19 @@ func (h *Handler) linksList(c *gin.Context) {
 
 	links := make([]model.Link, len(servLinks))
 	for i, servLink := range servLinks {
+		categories := make([]model.Category, len(servLink.Categories))
+		for j, servCategory := range servLink.Categories {
+			categories[j] = model.Category{
+				Id:   servCategory.Id,
+				Name: servCategory.Name,
+			}
+		}
+
 		links[i] = model.Link{
 			Id:          servLink.Id,
-			UserId:      servLink.UserId,
 			Ref:         servLink.Ref,
 			Description: servLink.Description,
-			Categories:  servLink.Categories,
+			Categories:  categories,
 		}
 	}
 
@@ -42,7 +49,7 @@ func (h *Handler) createLink(c *gin.Context) {
 		return
 	}
 
-	var inputLink model.Link
+	var inputLink model.LinkCreate
 	if err := c.BindJSON(&inputLink); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
@@ -50,7 +57,7 @@ func (h *Handler) createLink(c *gin.Context) {
 
 	inputLink.UserId = userId
 
-	id, err := h.services.Link.Create(servModel.Link{
+	id, err := h.services.Link.Create(servModel.LinkUpdate{
 		UserId:      inputLink.UserId,
 		Ref:         inputLink.Ref,
 		Description: inputLink.Description,
@@ -86,7 +93,20 @@ func (h *Handler) getLinkById(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, link)
+	categories := make([]model.Category, len(link.Categories))
+	for j, servCategory := range link.Categories {
+		categories[j] = model.Category{
+			Id:   servCategory.Id,
+			Name: servCategory.Name,
+		}
+	}
+
+	c.JSON(http.StatusCreated, model.Link{
+		Id:          link.Id,
+		Ref:         link.Ref,
+		Description: link.Description,
+		Categories:  categories,
+	})
 }
 
 func (h *Handler) updateLink(c *gin.Context) {
@@ -106,7 +126,7 @@ func (h *Handler) updateLink(c *gin.Context) {
 		categories = *linkUpdate.Categories
 	}
 
-	err = h.services.Link.Update(servModel.Link{
+	err = h.services.Link.Update(servModel.LinkUpdate{
 		UserId:      userId,
 		Id:          linkUpdate.Id,
 		Ref:         linkUpdate.Ref,
