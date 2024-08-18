@@ -93,3 +93,7 @@ func (s *AuthService) generatePasswordHash(password string) string {
 
 	return fmt.Sprintf("%x", hash.Sum([]byte(os.Getenv("CRYPTO_SALT"))))
 }
+
+func (s *AuthService) DeleteAccount(userId uuid.UUID) error {
+	return s.repo.DeleteAccount(userId)
+}

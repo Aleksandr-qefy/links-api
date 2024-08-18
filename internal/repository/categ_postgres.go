@@ -22,6 +22,7 @@ func (r *CategPostgres) Create(category repoModel.Category) (uuid.UUID, error) {
 		"INSERT INTO %s (user_id, name) VALUES ($1, $2) RETURNING id",
 		categoriesTable,
 	)
+
 	row := r.db.QueryRowx(query, category.UserId, category.Name)
 
 	var id uuid.UUID

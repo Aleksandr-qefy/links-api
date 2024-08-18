@@ -38,3 +38,12 @@ func (r *AuthPostgres) GetUser(user repoModel.User) (repoModel.User, error) {
 	err := r.db.Get(&outputUser, query, user.Name, user.PasswordHash)
 	return outputUser, err
 }
+
+func (r *AuthPostgres) DeleteAccount(userId uuid.UUID) error {
+	query := fmt.Sprintf(
+		"DELETE FROM %s WHERE id=$1",
+		usersTable,
+	)
+	_, err := r.db.Exec(query, userId)
+	return err
+}

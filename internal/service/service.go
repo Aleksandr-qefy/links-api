@@ -11,6 +11,7 @@ type Authorization interface {
 	GenerateToken(userAcc model.UserAccount) (string, error)
 	GetUser(userAcc model.UserAccount) (model.User, error)
 	ParseToken(bearerToken string) (uuid.UUID, error)
+	DeleteAccount(userId uuid.UUID) error
 }
 
 type Link interface {

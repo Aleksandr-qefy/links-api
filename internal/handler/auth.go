@@ -63,3 +63,22 @@ func (h *Handler) signIn(c *gin.Context) {
 		"id": id,
 	})
 }
+
+func (h *Handler) deleteAccount(c *gin.Context) {
+	userId, err := getUserId(c)
+	if err != nil {
+		return
+	}
+
+	if err := h.services.DeleteAccount(userId); err != nil {
+		newErrorResponse(
+			c,
+			http.StatusBadRequest,
+			fmt.Sprintf(err.Error()), // err.Error()
+		)
+	}
+
+	c.JSON(http.StatusOK, StatusResponse{
+		Status: "ok",
+	})
+}
