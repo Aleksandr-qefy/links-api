@@ -14,8 +14,7 @@ import (
 )
 
 const (
-	tokenTTL   = 30 * time.Minute
-	signingKey = "bkuvvkjuv56df89h2r8h3290102-9012-0e_)()YT&78tg2de7gh12gihi21d"
+	tokenTTL = 30 * time.Minute
 )
 
 type AuthService struct {
@@ -65,7 +64,7 @@ func (s *AuthService) GenerateToken(userAccount model.UserAccount) (uuid.UUID, s
 		user.Id,
 	})
 
-	signedToken, err := token.SignedString([]byte(signingKey))
+	signedToken, err := token.SignedString([]byte(os.Getenv("SIGNING_KEY")))
 
 	return user.Id, signedToken, err
 }
@@ -75,7 +74,7 @@ func (s *AuthService) ParseToken(accessToken string) (uuid.UUID, error) {
 		if _, isOk := token.Method.(*jwt.SigningMethodHMAC); !isOk {
 			return nil, errors.New("invalid signing method")
 		}
-		return []byte(signingKey), nil
+		return []byte(os.Getenv("SIGNING_KEY")), nil
 	})
 	if err != nil {
 		return "", err
