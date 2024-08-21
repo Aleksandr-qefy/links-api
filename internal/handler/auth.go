@@ -3,9 +3,15 @@ package handler
 import (
 	"fmt"
 	"github.com/Aleksandr-qefy/links-api/internal/handler/model"
-	serviceModel "github.com/Aleksandr-qefy/links-api/internal/service/model"
+	servModel "github.com/Aleksandr-qefy/links-api/internal/service/model"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"time"
+)
+
+const (
+	signUpTag = "sign_up"
+	signInTag = "sign_in"
 )
 
 func (h *Handler) signUp(c *gin.Context) {
@@ -15,7 +21,7 @@ func (h *Handler) signUp(c *gin.Context) {
 		return
 	}
 
-	id, err := h.services.Authorization.CreateUser(serviceModel.UserAccount{
+	id, err := h.services.Authorization.CreateUser(servModel.UserAccount{
 		Name:     userAccount.Name,
 		Password: userAccount.Password,
 	})
@@ -32,6 +38,12 @@ func (h *Handler) signUp(c *gin.Context) {
 		return
 	}
 
+	h.services.Statistic.Create(servModel.Statistic{
+		UserId:    id,
+		CreatedAt: time.Now(),
+		Activity:  signUpTag,
+	})
+
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"id": id,
 	})
@@ -44,8 +56,8 @@ func (h *Handler) signIn(c *gin.Context) {
 		return
 	}
 
-	id, err := h.services.Authorization.GenerateToken(
-		serviceModel.UserAccount{
+	userId, token, err := h.services.Authorization.GenerateToken(
+		servModel.UserAccount{
 			Name:     userAccount.Name,
 			Password: userAccount.Password,
 		},
@@ -59,8 +71,14 @@ func (h *Handler) signIn(c *gin.Context) {
 		return
 	}
 
+	h.services.Statistic.Create(servModel.Statistic{
+		UserId:    userId,
+		CreatedAt: time.Now(),
+		Activity:  signInTag,
+	})
+
 	c.JSON(http.StatusOK, map[string]interface{}{
-		"id": id,
+		"token": token,
 	})
 }
 

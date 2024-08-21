@@ -6,6 +6,15 @@ import (
 	"github.com/Aleksandr-qefy/links-api/internal/uuid"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"time"
+)
+
+const (
+	allCategoriesTag  = "all_categories"
+	createCategoryTag = "create_category"
+	getCategoryTag    = "get_category"
+	updateCategoryTag = "update_category"
+	deleteCategoryTag = "delete_category"
 )
 
 func (h *Handler) categoriesList(c *gin.Context) {
@@ -27,6 +36,12 @@ func (h *Handler) categoriesList(c *gin.Context) {
 			Name: servCategory.Name,
 		}
 	}
+
+	h.services.Statistic.Create(servModel.Statistic{
+		UserId:    userId,
+		CreatedAt: time.Now(),
+		Activity:  allCategoriesTag,
+	})
 
 	c.JSON(http.StatusCreated, map[string]interface{}{
 		"data": categories,
@@ -54,6 +69,14 @@ func (h *Handler) createCategory(c *gin.Context) {
 		return
 	}
 
+	comment := string(id)
+	h.services.Statistic.Create(servModel.Statistic{
+		UserId:    userId,
+		CreatedAt: time.Now(),
+		Activity:  createCategoryTag,
+		Comment:   &comment,
+	})
+
 	c.JSON(http.StatusCreated, map[string]interface{}{
 		"id": id,
 	})
@@ -78,6 +101,14 @@ func (h *Handler) getCategoryById(c *gin.Context) {
 		newErrorResponse(c, http.StatusBadRequest, "incorrect category id (or not accessible for this user)")
 		return
 	}
+
+	comment := string(categoryId)
+	h.services.Statistic.Create(servModel.Statistic{
+		UserId:    userId,
+		CreatedAt: time.Now(),
+		Activity:  getCategoryTag,
+		Comment:   &comment,
+	})
 
 	c.JSON(http.StatusCreated, link)
 }
@@ -104,6 +135,14 @@ func (h *Handler) updateCategory(c *gin.Context) {
 		return
 	}
 
+	comment := string(categoryUpdate.Id)
+	h.services.Statistic.Create(servModel.Statistic{
+		UserId:    userId,
+		CreatedAt: time.Now(),
+		Activity:  updateCategoryTag,
+		Comment:   &comment,
+	})
+
 	c.JSON(http.StatusOK, StatusResponse{
 		Status: "ok",
 	})
@@ -128,6 +167,14 @@ func (h *Handler) deleteCategoryById(c *gin.Context) {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
+
+	comment := string(categoryId)
+	h.services.Statistic.Create(servModel.Statistic{
+		UserId:    userId,
+		CreatedAt: time.Now(),
+		Activity:  deleteCategoryTag,
+		Comment:   &comment,
+	})
 
 	c.JSON(http.StatusOK, StatusResponse{
 		Status: "ok",

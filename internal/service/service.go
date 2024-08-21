@@ -8,7 +8,7 @@ import (
 
 type Authorization interface {
 	CreateUser(userAcc model.UserAccount) (uuid.UUID, error)
-	GenerateToken(userAcc model.UserAccount) (string, error)
+	GenerateToken(userAcc model.UserAccount) (uuid.UUID, string, error)
 	GetUser(userAcc model.UserAccount) (model.User, error)
 	ParseToken(bearerToken string) (uuid.UUID, error)
 	DeleteAccount(userId uuid.UUID) error
@@ -30,10 +30,16 @@ type Category interface {
 	Update(category model.Category) error
 }
 
+type Statistic interface {
+	Create(category model.Statistic) (uuid.UUID, error)
+	GetAll(userId uuid.UUID) ([]model.Statistic, error)
+}
+
 type Service struct {
 	Authorization
 	Link
 	Category
+	Statistic
 }
 
 func NewService(repos *repository.Repository) *Service {
@@ -41,5 +47,6 @@ func NewService(repos *repository.Repository) *Service {
 		Authorization: NewAuthService(repos.Authorization),
 		Link:          NewLinkService(repos.Link),
 		Category:      NewCategoryService(repos.Category),
+		Statistic:     NewStatisticService(repos.Statistic),
 	}
 }

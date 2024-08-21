@@ -6,6 +6,15 @@ import (
 	"github.com/Aleksandr-qefy/links-api/internal/uuid"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"time"
+)
+
+const (
+	allLinksTag   = "all_links"
+	createLinkTag = "create_link"
+	getLinkTag    = "get_link"
+	updateLinkTag = "update_link"
+	deleteLinkTag = "delete_link"
 )
 
 func (h *Handler) linksList(c *gin.Context) {
@@ -38,6 +47,12 @@ func (h *Handler) linksList(c *gin.Context) {
 		}
 	}
 
+	h.services.Statistic.Create(servModel.Statistic{
+		UserId:    userId,
+		CreatedAt: time.Now(),
+		Activity:  allLinksTag,
+	})
+
 	c.JSON(http.StatusCreated, map[string]interface{}{
 		"data": links,
 	})
@@ -67,6 +82,14 @@ func (h *Handler) createLink(c *gin.Context) {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
+
+	comment := string(id)
+	h.services.Statistic.Create(servModel.Statistic{
+		UserId:    userId,
+		CreatedAt: time.Now(),
+		Activity:  createLinkTag,
+		Comment:   &comment,
+	})
 
 	c.JSON(http.StatusCreated, map[string]interface{}{
 		"id": id,
@@ -100,6 +123,14 @@ func (h *Handler) getLinkById(c *gin.Context) {
 			Name: servCategory.Name,
 		}
 	}
+
+	comment := string(linkId)
+	h.services.Statistic.Create(servModel.Statistic{
+		UserId:    userId,
+		CreatedAt: time.Now(),
+		Activity:  getLinkTag,
+		Comment:   &comment,
+	})
 
 	c.JSON(http.StatusCreated, model.Link{
 		Id:          link.Id,
@@ -138,6 +169,14 @@ func (h *Handler) updateLink(c *gin.Context) {
 		return
 	}
 
+	comment := string(linkUpdate.Id)
+	h.services.Statistic.Create(servModel.Statistic{
+		UserId:    userId,
+		CreatedAt: time.Now(),
+		Activity:  updateLinkTag,
+		Comment:   &comment,
+	})
+
 	c.JSON(http.StatusOK, StatusResponse{
 		Status: "ok",
 	})
@@ -162,6 +201,14 @@ func (h *Handler) deleteLinkById(c *gin.Context) {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
+
+	comment := string(linkId)
+	h.services.Statistic.Create(servModel.Statistic{
+		UserId:    userId,
+		CreatedAt: time.Now(),
+		Activity:  deleteLinkTag,
+		Comment:   &comment,
+	})
 
 	c.JSON(http.StatusOK, StatusResponse{
 		Status: "ok",

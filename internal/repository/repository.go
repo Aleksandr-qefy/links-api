@@ -28,10 +28,16 @@ type Category interface {
 	Update(category repoModel.Category) error
 }
 
+type Statistic interface {
+	Create(category repoModel.Statistic) (uuid.UUID, error)
+	GetAll(userId uuid.UUID) ([]repoModel.Statistic, error)
+}
+
 type Repository struct {
 	Authorization
 	Link
 	Category
+	Statistic
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
@@ -39,5 +45,6 @@ func NewRepository(db *sqlx.DB) *Repository {
 		Authorization: NewAuthPostgres(db),
 		Link:          NewLinkPostgres(db),
 		Category:      NewCategPostgres(db),
+		Statistic:     NewStatPostgres(db),
 	}
 }

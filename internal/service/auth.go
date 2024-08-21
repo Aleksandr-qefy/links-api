@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	tokenTTL   = 15 * time.Minute
+	tokenTTL   = 30 * time.Minute
 	signingKey = "bkuvvkjuv56df89h2r8h3290102-9012-0e_)()YT&78tg2de7gh12gihi21d"
 )
 
@@ -51,10 +51,10 @@ func (s *AuthService) GetUser(userAccount model.UserAccount) (model.User, error)
 	return user, nil
 }
 
-func (s *AuthService) GenerateToken(userAccount model.UserAccount) (string, error) {
+func (s *AuthService) GenerateToken(userAccount model.UserAccount) (uuid.UUID, string, error) {
 	user, err := s.GetUser(userAccount)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, &model.TokenClaims{
@@ -65,7 +65,9 @@ func (s *AuthService) GenerateToken(userAccount model.UserAccount) (string, erro
 		user.Id,
 	})
 
-	return token.SignedString([]byte(signingKey))
+	signedToken, err := token.SignedString([]byte(signingKey))
+
+	return user.Id, signedToken, err
 }
 
 func (s *AuthService) ParseToken(accessToken string) (uuid.UUID, error) {

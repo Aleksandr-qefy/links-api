@@ -34,9 +34,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	{
 		statistics := api.Group("/statistics")
 		{
-			statistics.GET("/all/:userid", h.statisticList) // get all
-
-			statistics.DELETE("/:id", h.deleteStatistic) // delete
+			statistics.GET("/all/", h.statisticList) // get all
 		}
 
 		categories := api.Group("/categories")
