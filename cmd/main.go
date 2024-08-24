@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/Aleksandr-qefy/links-api/internal/handler"
 	"github.com/Aleksandr-qefy/links-api/internal/repository"
-	server "github.com/Aleksandr-qefy/links-api/internal/server"
+	"github.com/Aleksandr-qefy/links-api/internal/server"
 	"github.com/Aleksandr-qefy/links-api/internal/service"
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
@@ -13,6 +13,14 @@ import (
 	"os/signal"
 	"syscall"
 )
+
+// @title           Link API
+// @version         1.0
+// @description     SPI server for Link List Application.
+
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 
 func main() {
 	logrus.SetFormatter(&logrus.JSONFormatter{})

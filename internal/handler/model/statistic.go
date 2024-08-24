@@ -11,3 +11,7 @@ type Statistic struct {
 	Activity  string    `json:"activity"`
 	Comment   *string   `json:"comment,omitempty"`
 }
+
+type AllStatistics struct {
+	Data []Statistic `json:"data"`
+}

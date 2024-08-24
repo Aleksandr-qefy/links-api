@@ -11,11 +11,14 @@ type LinkCreate struct {
 }
 
 type Link struct {
-	Id uuid.UUID `json:"id"`
-	//UserId      uuid.UUID  `json:"userId"`
+	Id          uuid.UUID  `json:"id"`
 	Ref         string     `json:"ref" binding:"required"`
 	Description *string    `json:"description,omitempty"`
 	Categories  []Category `json:"categories"`
+}
+
+type AllLinks struct {
+	Data []Link `json:"data"`
 }
 
 type LinkUpdate struct {

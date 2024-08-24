@@ -110,7 +110,7 @@ func (s LinkService) Update(link model.LinkUpdate) error {
 	}
 
 	trimmedRef := strings.TrimSpace(link.Ref)
-	if link.Ref != "" && trimmedRef == "" { // check if in update link was not ref at all
+	if link.Ref != "" && trimmedRef == "" { // check if in update link there's no ref at all
 		return errors.New("link's ref should contain url")
 	}
 	return s.repo.Update(

@@ -3,9 +3,12 @@ package model
 import "github.com/Aleksandr-qefy/links-api/internal/uuid"
 
 type Category struct {
-	Id uuid.UUID `json:"id"`
-	//UserId uuid.UUID `json:"userId"`
-	Name string `json:"name"`
+	Id   uuid.UUID `json:"id"`
+	Name string    `json:"name"`
+}
+
+type AllCategories struct {
+	Data []Category `json:"data"`
 }
 
 type CategoryUpdate struct {

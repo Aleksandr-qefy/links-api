@@ -17,6 +17,14 @@ const (
 	deleteCategoryTag = "delete_category"
 )
 
+// @Summary Categories List
+// @Description Show categories list
+// @Tags categories
+// @Security ApiKeyAuth
+// @Produce json
+// @Success 200 {object} model.AllCategories
+// @Failure 400 {object} Error
+// @Router /api/categories/all [get]
 func (h *Handler) categoriesList(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -43,11 +51,21 @@ func (h *Handler) categoriesList(c *gin.Context) {
 		Activity:  allCategoriesTag,
 	})
 
-	c.JSON(http.StatusCreated, map[string]interface{}{
-		"data": categories,
+	c.JSON(http.StatusCreated, model.AllCategories{
+		Data: categories,
 	})
 }
 
+// @Summary Create Category
+// @Description Create new category
+// @Tags categories
+// @Security ApiKeyAuth
+// @Accept json
+// @Produce json
+// @Param input body model.Category true "New category"
+// @Success 200 {object} IDResponse
+// @Failure 400 {object} Error
+// @Router /api/categories [put]
 func (h *Handler) createCategory(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -77,11 +95,21 @@ func (h *Handler) createCategory(c *gin.Context) {
 		Comment:   &comment,
 	})
 
-	c.JSON(http.StatusCreated, map[string]interface{}{
-		"id": id,
+	c.JSON(http.StatusCreated, IDResponse{
+		ID: id,
 	})
 }
 
+// @Summary Get Category By Id
+// @Description Get category by id
+// @Tags categories
+// @Security ApiKeyAuth
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.Category
+// @Failure 400 {object} Error
+// @Param id path string true "Category ID"
+// @Router /api/categories/{id} [get]
 func (h *Handler) getCategoryById(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -96,7 +124,7 @@ func (h *Handler) getCategoryById(c *gin.Context) {
 
 	categoryId := uuid.UUID(categoryIdStr)
 
-	link, err := h.services.Category.GetById(userId, categoryId)
+	category, err := h.services.Category.GetById(userId, categoryId)
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, "incorrect category id (or not accessible for this user)")
 		return
@@ -110,9 +138,22 @@ func (h *Handler) getCategoryById(c *gin.Context) {
 		Comment:   &comment,
 	})
 
-	c.JSON(http.StatusCreated, link)
+	c.JSON(http.StatusCreated, model.Category{
+		Id:   category.Id,
+		Name: category.Name,
+	})
 }
 
+// @Summary Update Category
+// @Description Update category
+// @Tags categories
+// @Security ApiKeyAuth
+// @Accept json
+// @Produce json
+// @Param input body model.Category true "Update category"
+// @Success 200 {object} StatusResponse
+// @Failure 400 {object} Error
+// @Router /api/categories [post]
 func (h *Handler) updateCategory(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -148,6 +189,15 @@ func (h *Handler) updateCategory(c *gin.Context) {
 	})
 }
 
+// @Summary Delete Category By Id
+// @Description Delete category by id
+// @Tags categories
+// @Security ApiKeyAuth
+// @Produce json
+// @Success 200 {object} StatusResponse
+// @Failure 400 {object} Error
+// @Param id path string true "Category ID"
+// @Router /api/categories/{id} [delete]
 func (h *Handler) deleteCategoryById(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {

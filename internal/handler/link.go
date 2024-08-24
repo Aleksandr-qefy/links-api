@@ -17,6 +17,14 @@ const (
 	deleteLinkTag = "delete_link"
 )
 
+// @Summary Links List
+// @Description Show links list
+// @Tags links
+// @Security ApiKeyAuth
+// @Produce json
+// @Success 200 {object} model.AllLinks
+// @Failure 400 {object} Error
+// @Router /api/links/all [get]
 func (h *Handler) linksList(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -53,11 +61,21 @@ func (h *Handler) linksList(c *gin.Context) {
 		Activity:  allLinksTag,
 	})
 
-	c.JSON(http.StatusCreated, map[string]interface{}{
-		"data": links,
+	c.JSON(http.StatusCreated, model.AllLinks{
+		Data: links,
 	})
 }
 
+// @Summary Create Link
+// @Description Create new link
+// @Tags links
+// @Security ApiKeyAuth
+// @Accept json
+// @Produce json
+// @Param input body model.Category true "New link"
+// @Success 200 {object} IDResponse
+// @Failure 400 {object} Error
+// @Router /api/links [put]
 func (h *Handler) createLink(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -91,11 +109,21 @@ func (h *Handler) createLink(c *gin.Context) {
 		Comment:   &comment,
 	})
 
-	c.JSON(http.StatusCreated, map[string]interface{}{
-		"id": id,
+	c.JSON(http.StatusCreated, IDResponse{
+		ID: id,
 	})
 }
 
+// @Summary Get Link By Id
+// @Description Get link by id
+// @Tags links
+// @Security ApiKeyAuth
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.Link
+// @Failure 400 {object} Error
+// @Param id path string true "Link ID"
+// @Router /api/links/{id} [get]
 func (h *Handler) getLinkById(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -140,6 +168,16 @@ func (h *Handler) getLinkById(c *gin.Context) {
 	})
 }
 
+// @Summary Update Link
+// @Description Update link
+// @Tags links
+// @Security ApiKeyAuth
+// @Accept json
+// @Produce json
+// @Param input body model.Link true "Update link"
+// @Success 200 {object} StatusResponse
+// @Failure 400 {object} Error
+// @Router /api/links [post]
 func (h *Handler) updateLink(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -182,6 +220,15 @@ func (h *Handler) updateLink(c *gin.Context) {
 	})
 }
 
+// @Summary Delete Link By Id
+// @Description Delete link by id
+// @Tags links
+// @Security ApiKeyAuth
+// @Produce json
+// @Success 200 {object} StatusResponse
+// @Failure 400 {object} Error
+// @Param id path string true "Link ID"
+// @Router /api/links/{id} [delete]
 func (h *Handler) deleteLinkById(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {

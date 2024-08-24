@@ -3,7 +3,6 @@ package repository
 import (
 	"fmt"
 	repoModel "github.com/Aleksandr-qefy/links-api/internal/repository/model"
-	//serviceModel "github.com/Aleksandr-qefy/links-api/internal/service/model"
 	"github.com/Aleksandr-qefy/links-api/internal/uuid"
 	"github.com/jmoiron/sqlx"
 )

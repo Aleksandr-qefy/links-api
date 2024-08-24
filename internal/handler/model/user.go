@@ -4,9 +4,6 @@ import (
 	"github.com/Aleksandr-qefy/links-api/internal/uuid"
 )
 
-// https://www.sohamkamani.com/golang/json/
-// JSON output
-
 type User struct {
 	Id           uuid.UUID `json:"-"`
 	Name         string    `json:"name" binding:"required"`

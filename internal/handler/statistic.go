@@ -6,6 +6,14 @@ import (
 	"net/http"
 )
 
+// @Summary Statistic List
+// @Description Show statistic list
+// @Tags statistics
+// @Security ApiKeyAuth
+// @Produce json
+// @Success 200 {object} model.AllStatistics
+// @Failure 400 {object} Error
+// @Router /api/statistics/all [get]
 func (h *Handler) statisticList(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -28,7 +36,7 @@ func (h *Handler) statisticList(c *gin.Context) {
 		}
 	}
 
-	c.JSON(http.StatusOK, map[string]interface{}{
-		"data": statistics,
+	c.JSON(http.StatusOK, model.AllStatistics{
+		Data: statistics,
 	})
 }

@@ -14,6 +14,15 @@ const (
 	signInTag = "sign_in"
 )
 
+// @Summary Sign Up
+// @Description Create account
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param input body model.UserAccount true "Create account"
+// @Success 200 {string} XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+// @Failure 400 {object} Error
+// @Router /auth/sign-up [post]
 func (h *Handler) signUp(c *gin.Context) {
 	var userAccount model.UserAccount
 	if err := c.BindJSON(&userAccount); err != nil {
@@ -33,7 +42,7 @@ func (h *Handler) signUp(c *gin.Context) {
 				"User with name '%s' exists already (%s)",
 				userAccount.Name,
 				err.Error(),
-			), // err.Error()
+			),
 		)
 		return
 	}
@@ -44,11 +53,20 @@ func (h *Handler) signUp(c *gin.Context) {
 		Activity:  signUpTag,
 	})
 
-	c.JSON(http.StatusOK, map[string]interface{}{
-		"id": id,
+	c.JSON(http.StatusOK, IDResponse{
+		ID: id,
 	})
 }
 
+// @Summary Sign In
+// @Description Log in
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param input body model.UserAccount true "Log in"
+// @Success 200 {string} string "<jwt token>"
+// @Failure 400 {object} Error
+// @Router /auth/sign-in [post]
 func (h *Handler) signIn(c *gin.Context) {
 	var userAccount model.UserAccount
 	if err := c.BindJSON(&userAccount); err != nil {
@@ -66,7 +84,7 @@ func (h *Handler) signIn(c *gin.Context) {
 		newErrorResponse(
 			c,
 			http.StatusBadRequest,
-			fmt.Sprintf("Incorrect name or password (%s)", err.Error()), // err.Error()
+			fmt.Sprintf("Incorrect name or password (%s)", err.Error()),
 		)
 		return
 	}
@@ -82,6 +100,14 @@ func (h *Handler) signIn(c *gin.Context) {
 	})
 }
 
+// @Summary Sign In
+// @Description Delete account
+// @Tags auth
+// @Security ApiKeyAuth
+// @Produce json
+// @Success 200 {string} ok
+// @Failure 400 {object} Error
+// @Router /auth/delete [get]
 func (h *Handler) deleteAccount(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -92,7 +118,7 @@ func (h *Handler) deleteAccount(c *gin.Context) {
 		newErrorResponse(
 			c,
 			http.StatusBadRequest,
-			fmt.Sprintf(err.Error()), // err.Error()
+			err.Error(),
 		)
 	}
 
