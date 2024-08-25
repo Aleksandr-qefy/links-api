@@ -24,6 +24,7 @@ const (
 // @Produce json
 // @Success 200 {object} model.AllCategories
 // @Failure 400 {object} Error
+// @Failure 401 {object} Error
 // @Router /api/categories/all [get]
 func (h *Handler) categoriesList(c *gin.Context) {
 	userId, err := getUserId(c)
@@ -65,6 +66,7 @@ func (h *Handler) categoriesList(c *gin.Context) {
 // @Param input body model.Category true "New category"
 // @Success 200 {object} IDResponse
 // @Failure 400 {object} Error
+// @Failure 401 {object} Error
 // @Router /api/categories [put]
 func (h *Handler) createCategory(c *gin.Context) {
 	userId, err := getUserId(c)
@@ -108,6 +110,7 @@ func (h *Handler) createCategory(c *gin.Context) {
 // @Produce json
 // @Success 200 {object} model.Category
 // @Failure 400 {object} Error
+// @Failure 401 {object} Error
 // @Param id path string true "Category ID"
 // @Router /api/categories/{id} [get]
 func (h *Handler) getCategoryById(c *gin.Context) {
@@ -150,9 +153,10 @@ func (h *Handler) getCategoryById(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Accept json
 // @Produce json
-// @Param input body model.Category true "Update category"
+// @Param input body model.CategoryUpdate true "Update category"
 // @Success 200 {object} StatusResponse
 // @Failure 400 {object} Error
+// @Failure 401 {object} Error
 // @Router /api/categories [post]
 func (h *Handler) updateCategory(c *gin.Context) {
 	userId, err := getUserId(c)
@@ -196,6 +200,7 @@ func (h *Handler) updateCategory(c *gin.Context) {
 // @Produce json
 // @Success 200 {object} StatusResponse
 // @Failure 400 {object} Error
+// @Failure 401 {object} Error
 // @Param id path string true "Category ID"
 // @Router /api/categories/{id} [delete]
 func (h *Handler) deleteCategoryById(c *gin.Context) {

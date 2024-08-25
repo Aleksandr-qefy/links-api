@@ -1,0 +1,555 @@
+definitions:
+  github_com_Aleksandr-qefy_links-api_internal_handler_model.AllCategories:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/github_com_Aleksandr-qefy_links-api_internal_handler_model.Category'
+        type: array
+    type: object
+  github_com_Aleksandr-qefy_links-api_internal_handler_model.AllLinks:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/github_com_Aleksandr-qefy_links-api_internal_handler_model.Link'
+        type: array
+    type: object
+  github_com_Aleksandr-qefy_links-api_internal_handler_model.AllStatistics:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/github_com_Aleksandr-qefy_links-api_internal_handler_model.Statistic'
+        type: array
+    type: object
+  github_com_Aleksandr-qefy_links-api_internal_handler_model.Category:
+    properties:
+      id:
+        example: ffffffff-ffff-ffff-ffff-ffffffffffff
+        type: string
+      name:
+        example: IT Category
+        type: string
+    required:
+    - name
+    type: object
+  github_com_Aleksandr-qefy_links-api_internal_handler_model.CategoryUpdate:
+    properties:
+      id:
+        example: ffffffff-ffff-ffff-ffff-ffffffffffff
+        type: string
+      name:
+        example: Golang API
+        type: string
+    required:
+    - id
+    - name
+    type: object
+  github_com_Aleksandr-qefy_links-api_internal_handler_model.Link:
+    properties:
+      categories:
+        items:
+          $ref: '#/definitions/github_com_Aleksandr-qefy_links-api_internal_handler_model.Category'
+        type: array
+      description:
+        example: ""
+        type: string
+      id:
+        example: ffffffff-ffff-ffff-ffff-ffffffffffff
+        type: string
+      ref:
+        example: "https://mpei.ru/Pages/default.aspx \n "
+        type: string
+    required:
+    - ref
+    type: object
+  github_com_Aleksandr-qefy_links-api_internal_handler_model.LinkCreate:
+    properties:
+      categories:
+        example:
+        - ffffffff-ffff-ffff-ffff-ffffffffffff
+        items:
+          type: string
+        type: array
+      description:
+        example: "\n \n My Github \n\t"
+        type: string
+      id:
+        example: ffffffff-ffff-ffff-ffff-ffffffffffff
+        type: string
+      ref:
+        example: "\n \n https://github.com/Aleksandr-qefy/ \n\t"
+        type: string
+      userId:
+        example: ffffffff-ffff-ffff-ffff-ffffffffffff
+        type: string
+    required:
+    - ref
+    type: object
+  github_com_Aleksandr-qefy_links-api_internal_handler_model.LinkUpdate:
+    properties:
+      categories:
+        items:
+          type: string
+        type: array
+      description:
+        example: ""
+        type: string
+      id:
+        example: ffffffff-ffff-ffff-ffff-ffffffffffff
+        type: string
+      ref:
+        example: "https://mpei.ru/Pages/default.aspx \n "
+        type: string
+    required:
+    - id
+    type: object
+  github_com_Aleksandr-qefy_links-api_internal_handler_model.Statistic:
+    properties:
+      activity:
+        example: get_category
+        type: string
+      comment:
+        example: ffffffff-ffff-ffff-ffff-ffffffffffff
+        type: string
+      createdAt:
+        example: "2024-08-24T15:18:09.055118+03:00"
+        type: string
+      id:
+        example: ffffffff-ffff-ffff-ffff-ffffffffffff
+        type: string
+    type: object
+  github_com_Aleksandr-qefy_links-api_internal_handler_model.UserAccount:
+    properties:
+      name:
+        example: john
+        type: string
+      password:
+        example: "1234"
+        type: string
+    required:
+    - name
+    - password
+    type: object
+  internal_handler.Error:
+    properties:
+      message:
+        example: some error message
+        type: string
+    type: object
+  internal_handler.IDResponse:
+    properties:
+      id:
+        example: ffffffff-ffff-ffff-ffff-ffffffffffff
+        type: string
+    type: object
+  internal_handler.StatusResponse:
+    properties:
+      status:
+        example: ok
+        type: string
+    type: object
+  internal_handler.TokenResponse:
+    properties:
+      token:
+        example: <jwt token>
+        type: string
+    type: object
+info:
+  contact: {}
+  description: SPI server for Link List Application.
+  title: Link API
+  version: "1.0"
+paths:
+  /api/categories:
+    post:
+      consumes:
+      - application/json
+      description: Update category
+      parameters:
+      - description: Update category
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_Aleksandr-qefy_links-api_internal_handler_model.CategoryUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handler.StatusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_handler.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_handler.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: Update Category
+      tags:
+      - categories
+    put:
+      consumes:
+      - application/json
+      description: Create new category
+      parameters:
+      - description: New category
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_Aleksandr-qefy_links-api_internal_handler_model.Category'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handler.IDResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_handler.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_handler.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: Create Category
+      tags:
+      - categories
+  /api/categories/{id}:
+    delete:
+      description: Delete category by id
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handler.StatusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_handler.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_handler.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete Category By Id
+      tags:
+      - categories
+    get:
+      consumes:
+      - application/json
+      description: Get category by id
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_Aleksandr-qefy_links-api_internal_handler_model.Category'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_handler.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_handler.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Category By Id
+      tags:
+      - categories
+  /api/categories/all:
+    get:
+      description: Show categories list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_Aleksandr-qefy_links-api_internal_handler_model.AllCategories'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_handler.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_handler.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: Categories List
+      tags:
+      - categories
+  /api/links:
+    post:
+      consumes:
+      - application/json
+      description: Update link
+      parameters:
+      - description: Update link
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_Aleksandr-qefy_links-api_internal_handler_model.LinkUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handler.StatusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_handler.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_handler.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: Update Link
+      tags:
+      - links
+    put:
+      consumes:
+      - application/json
+      description: Create new link
+      parameters:
+      - description: New link
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_Aleksandr-qefy_links-api_internal_handler_model.LinkCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handler.IDResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_handler.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_handler.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: Create Link
+      tags:
+      - links
+  /api/links/{id}:
+    delete:
+      description: Delete link by id
+      parameters:
+      - description: Link ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handler.StatusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_handler.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_handler.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete Link By Id
+      tags:
+      - links
+    get:
+      consumes:
+      - application/json
+      description: Get link by id
+      parameters:
+      - description: Link ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_Aleksandr-qefy_links-api_internal_handler_model.Link'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_handler.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_handler.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Link By Id
+      tags:
+      - links
+  /api/links/all:
+    get:
+      description: Show links list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_Aleksandr-qefy_links-api_internal_handler_model.AllLinks'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_handler.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_handler.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: Links List
+      tags:
+      - links
+  /api/statistics/all:
+    get:
+      description: Show statistic list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_Aleksandr-qefy_links-api_internal_handler_model.AllStatistics'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_handler.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_handler.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: Statistic List
+      tags:
+      - statistics
+  /auth/delete:
+    get:
+      description: Delete account
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handler.StatusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_handler.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_handler.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete Account
+      tags:
+      - auth
+  /auth/sign-in:
+    post:
+      consumes:
+      - application/json
+      description: Log in
+      parameters:
+      - description: Log in
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_Aleksandr-qefy_links-api_internal_handler_model.UserAccount'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handler.TokenResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_handler.Error'
+      summary: Sign In
+      tags:
+      - auth
+  /auth/sign-up:
+    post:
+      consumes:
+      - application/json
+      description: Create account
+      parameters:
+      - description: Create account
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_Aleksandr-qefy_links-api_internal_handler_model.UserAccount'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handler.IDResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_handler.Error'
+      summary: Sign Up
+      tags:
+      - auth
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

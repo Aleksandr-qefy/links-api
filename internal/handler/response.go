@@ -7,15 +7,19 @@ import (
 )
 
 type Error struct {
-	Message string `json:"message"`
+	Message string `json:"message" example:"some error message"`
 }
 
 type StatusResponse struct {
-	Status string `json:"status"`
+	Status string `json:"status" example:"ok"`
 }
 
 type IDResponse struct {
-	ID uuid.UUID `json:"id"`
+	ID uuid.UUID `json:"id" example:"ffffffff-ffff-ffff-ffff-ffffffffffff"`
+}
+
+type TokenResponse struct {
+	Token string `json:"token" example:"<jwt token>"`
 }
 
 func newErrorResponse(c *gin.Context, statusCode int, message string) {

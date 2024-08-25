@@ -24,6 +24,7 @@ const (
 // @Produce json
 // @Success 200 {object} model.AllLinks
 // @Failure 400 {object} Error
+// @Failure 401 {object} Error
 // @Router /api/links/all [get]
 func (h *Handler) linksList(c *gin.Context) {
 	userId, err := getUserId(c)
@@ -72,9 +73,10 @@ func (h *Handler) linksList(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Accept json
 // @Produce json
-// @Param input body model.Category true "New link"
+// @Param input body model.LinkCreate true "New link"
 // @Success 200 {object} IDResponse
 // @Failure 400 {object} Error
+// @Failure 401 {object} Error
 // @Router /api/links [put]
 func (h *Handler) createLink(c *gin.Context) {
 	userId, err := getUserId(c)
@@ -122,6 +124,7 @@ func (h *Handler) createLink(c *gin.Context) {
 // @Produce json
 // @Success 200 {object} model.Link
 // @Failure 400 {object} Error
+// @Failure 401 {object} Error
 // @Param id path string true "Link ID"
 // @Router /api/links/{id} [get]
 func (h *Handler) getLinkById(c *gin.Context) {
@@ -174,9 +177,10 @@ func (h *Handler) getLinkById(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Accept json
 // @Produce json
-// @Param input body model.Link true "Update link"
+// @Param input body model.LinkUpdate true "Update link"
 // @Success 200 {object} StatusResponse
 // @Failure 400 {object} Error
+// @Failure 401 {object} Error
 // @Router /api/links [post]
 func (h *Handler) updateLink(c *gin.Context) {
 	userId, err := getUserId(c)
@@ -227,6 +231,7 @@ func (h *Handler) updateLink(c *gin.Context) {
 // @Produce json
 // @Success 200 {object} StatusResponse
 // @Failure 400 {object} Error
+// @Failure 401 {object} Error
 // @Param id path string true "Link ID"
 // @Router /api/links/{id} [delete]
 func (h *Handler) deleteLinkById(c *gin.Context) {

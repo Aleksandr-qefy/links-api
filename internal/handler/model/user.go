@@ -11,6 +11,6 @@ type User struct {
 }
 
 type UserAccount struct {
-	Name     string `json:"name" binding:"required"`
-	Password string `json:"password" binding:"required"`
+	Name     string `json:"name" binding:"required" example:"john"`
+	Password string `json:"password" binding:"required" example:"1234"`
 }

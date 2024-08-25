@@ -20,7 +20,7 @@ const (
 // @Accept json
 // @Produce json
 // @Param input body model.UserAccount true "Create account"
-// @Success 200 {string} XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+// @Success 200 {object} IDResponse
 // @Failure 400 {object} Error
 // @Router /auth/sign-up [post]
 func (h *Handler) signUp(c *gin.Context) {
@@ -39,7 +39,7 @@ func (h *Handler) signUp(c *gin.Context) {
 			c,
 			http.StatusBadRequest,
 			fmt.Sprintf(
-				"User with name '%s' exists already (%s)",
+				"user with name '%s' exists already (%s)",
 				userAccount.Name,
 				err.Error(),
 			),
@@ -64,7 +64,7 @@ func (h *Handler) signUp(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param input body model.UserAccount true "Log in"
-// @Success 200 {string} string "<jwt token>"
+// @Success 200 {object} TokenResponse
 // @Failure 400 {object} Error
 // @Router /auth/sign-in [post]
 func (h *Handler) signIn(c *gin.Context) {
@@ -84,7 +84,7 @@ func (h *Handler) signIn(c *gin.Context) {
 		newErrorResponse(
 			c,
 			http.StatusBadRequest,
-			fmt.Sprintf("Incorrect name or password (%s)", err.Error()),
+			"incorrect name or password",
 		)
 		return
 	}
@@ -100,13 +100,14 @@ func (h *Handler) signIn(c *gin.Context) {
 	})
 }
 
-// @Summary Sign In
+// @Summary Delete Account
 // @Description Delete account
 // @Tags auth
 // @Security ApiKeyAuth
 // @Produce json
-// @Success 200 {string} ok
+// @Success 200 {object} StatusResponse
 // @Failure 400 {object} Error
+// @Failure 401 {object} Error
 // @Router /auth/delete [get]
 func (h *Handler) deleteAccount(c *gin.Context) {
 	userId, err := getUserId(c)

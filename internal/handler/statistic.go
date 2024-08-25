@@ -13,6 +13,7 @@ import (
 // @Produce json
 // @Success 200 {object} model.AllStatistics
 // @Failure 400 {object} Error
+// @Failure 401 {object} Error
 // @Router /api/statistics/all [get]
 func (h *Handler) statisticList(c *gin.Context) {
 	userId, err := getUserId(c)

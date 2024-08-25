@@ -3,8 +3,8 @@ package model
 import "github.com/Aleksandr-qefy/links-api/internal/uuid"
 
 type Category struct {
-	Id   uuid.UUID `json:"id"`
-	Name string    `json:"name"`
+	Id   uuid.UUID `json:"id" example:"ffffffff-ffff-ffff-ffff-ffffffffffff"`
+	Name string    `json:"name" binding:"required" example:"IT Category"`
 }
 
 type AllCategories struct {
@@ -12,11 +12,6 @@ type AllCategories struct {
 }
 
 type CategoryUpdate struct {
-	Id   uuid.UUID `json:"id" binding:"required"`
-	Name string    `json:"name" binding:"required"`
-}
-
-type LinkCategory struct {
-	LinkId     uuid.UUID `json:"linkId"`
-	CategoryId uuid.UUID `json:"categoryId"`
+	Id   uuid.UUID `json:"id" binding:"required" example:"ffffffff-ffff-ffff-ffff-ffffffffffff"`
+	Name string    `json:"name" binding:"required" example:"Golang API"`
 }
