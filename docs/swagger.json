@@ -3,7 +3,10 @@
     "info": {
         "description": "SPI server for Link List Application.",
         "title": "Link API",
-        "contact": {},
+        "contact": {
+            "name": "Aleksandr Piter",
+            "email": "siralexpeter@mail.ru"
+        },
         "version": "1.0"
     },
     "paths": {

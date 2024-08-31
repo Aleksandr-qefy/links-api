@@ -154,7 +154,9 @@ definitions:
         type: string
     type: object
 info:
-  contact: {}
+  contact:
+    email: siralexpeter@mail.ru
+    name: Aleksandr Piter
   description: SPI server for Link List Application.
   title: Link API
   version: "1.0"

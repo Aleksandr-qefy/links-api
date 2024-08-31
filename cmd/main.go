@@ -18,6 +18,9 @@ import (
 // @version         1.0
 // @description     SPI server for Link List Application.
 
+// @contact.name   Aleksandr Piter
+// @contact.email  siralexpeter@mail.ru
+
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization
